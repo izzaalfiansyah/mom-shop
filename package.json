@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.37"
+    "@types/toastr": "^2.1.40",
+    "toastr": "^2.1.4",
+    "vue": "^3.2.37",
+    "vue-router": "4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.0",

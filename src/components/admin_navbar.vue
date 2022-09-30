@@ -1,24 +1,32 @@
 <script lang="ts" setup="">
 	import { reactive } from 'vue';
+	import { notif } from '../lib';
 	import Modal from './modal.vue';
 
-	const modal = reactive({
+	const state = reactive({
 		logout: false,
+		loading: false,
 	});
 
 	function logout() {
 		localStorage.removeItem('id');
-		window.location.href = window.location.origin + window.location.pathname;
+		state.loading = true;
+		notif.info('berhasil logout');
+		setTimeout(() => {
+			window.location.href = window.location.origin + window.location.pathname;
+		}, 1500);
 	}
 </script>
 
 <template>
+	<div class="loading-screen" v-if="state.loading">Mengalihkan. Memuat....</div>
+
 	<form @submit.prevent="logout">
-		<Modal v-model="modal.logout" title="Logout">
+		<Modal v-model="state.logout" title="Logout">
 			Anda yakin akan logout? Sesi anda akan diakhiri!
 
 			<template #footer>
-				<button @click="modal.logout = false" class="btn" type="button">Batal</button>
+				<button @click="state.logout = false" class="btn" type="button">Batal</button>
 				<button class="btn btn-danger" type="submit">Logout</button>
 			</template>
 		</Modal>
@@ -70,10 +78,10 @@
 								width="40" /><span class="avatar-status-online"></span></span
 					></a>
 					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
-						<a class="dropdown-item" href="/profil"
-							><i class="me-50" data-feather="user"></i> Profile</a
+						<RouterLink class="dropdown-item" to="/profil"
+							><i class="me-50" data-feather="user"></i> Akun</RouterLink
 						>
-						<a class="dropdown-item" @click.prevent="modal.logout = true" href="/logout"
+						<a class="dropdown-item" @click.prevent="state.logout = true" href="/logout"
 							><i class="me-50" data-feather="power"></i> Logout</a
 						>
 					</div>

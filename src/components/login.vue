@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 	import './login.css';
 	import { onMounted, reactive } from 'vue';
+	import { notif } from '../lib';
 
 	onMounted(() => {
 		document.body.className =
@@ -15,22 +16,30 @@
 		password: '',
 	});
 
+	const state = reactive({
+		loading: false,
+	});
+
 	function login() {
 		if (req.username == 'superadmin') {
 			if (req.password == 'superadmin') {
-				// berhasil login
+				notif.info('berhasil login');
 				localStorage.setItem('id', '1');
-				window.location.href = window.location.origin + window.location.pathname;
+				state.loading = true;
+				setTimeout(() => {
+					window.location.href = window.location.origin + window.location.pathname;
+				}, 1500);
 			} else {
-				// password salah
+				notif.error('password salah');
 			}
 		} else {
-			// username tidak ditemukan
+			notif.error('username tidak ditemukan');
 		}
 	}
 </script>
 
 <template>
+	<div class="loading-screen" v-if="state.loading">Mengalihkan. Memuat....</div>
 	<!-- BEGIN: Content-->
 	<div class="app-content content">
 		<div class="content-overlay"></div>
