@@ -2,43 +2,41 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
+    public $table = 'user';
+
+    public $fillable = [
+        'username',
         'password',
+        'nama',
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+    public $appends = [
+        'roleDetail',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function getRoleDetailAttribute()
+    {
+        $role =  [1 => 'admin', 2 => 'general'][(int) $this->role];
+        return $role;
+    }
+
+    public static function rules($id = null)
+    {
+        return [
+            'username' => ['required', $id ? Rule::unique('user')->ignore($id) : Rule::unique('user'), 'min:5', 'max:255'],
+            'password' => [$id ? 'nullable' : 'required', Password::min(8), 'min:8'],
+            'nama' => 'required|max:255|min:2',
+            'role' => 'required|in:1,2',
+        ];
+    }
 }
