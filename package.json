@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/toastr": "^2.1.40",
+    "axios": "^0.27.2",
     "toastr": "^2.1.4",
     "vue": "^3.2.37",
     "vue-router": "4"

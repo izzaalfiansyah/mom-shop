@@ -12,8 +12,6 @@
 		if (feather) {
 			feather.replace({ width: 14, height: 14 });
 		}
-
-		new PerfectScrollbar('.scrollable-container', { wheelPropagation: !1 });
 	}
 
 	onMounted(() => {
